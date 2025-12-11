@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shree ji Store - Info Page</title>
+
+<style>
+    body{
+        margin:0;
+        font-family:Arial, sans-serif;
+        background:#f4f4f4;
+        color:#333;
+    }
+
+    .header{
+        background:#ffffff;
+        padding:15px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        border-bottom:2px solid #eee;
+        position:sticky;
+        top:0;
+        z-index:100;
+    }
+
+    .logo{
+        font-size:22px;
+        font-weight:700;
+        color:#0d9488;
+    }
+
+    .search-bar{
+        display:flex;
+        gap:8px;
+    }
+    .search-bar input{
+        padding:8px;
+        border:1px solid #ccc;
+        border-radius:6px;
+        width:200px;
+    }
+    .search-btn{
+        padding:8px 14px;
+        background:#0d9488;
+        color:#fff;
+        border:none;
+        border-radius:6px;
+        cursor:pointer;
+    }
+
+    .icons button{
+        font-size:20px;
+        background:none;
+        border:none;
+        cursor:pointer;
+        margin-left:12px;
+    }
+
+    .container{
+        padding:18px;
+    }
+
+    h2{
+        margin-top:25px;
+        color:#0d9488;
+    }
+
+    .section{
+        background:white;
+        padding:15px;
+        margin:15px 0;
+        border-radius:8px;
+        border:1px solid #e0e0e0;
+    }
+
+    .footer{
+        text-align:center;
+        padding:20px;
+        background:#fff;
+        color:#666;
+        margin-top:20px;
+        border-top:1px solid #ddd;
+    }
+</style>
+
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo">Welcome to Shree ji Store</div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Search for products, brands and more...">
+        <button class="search-btn">Search</button>
+    </div>
+
+    <div class="icons">
+        <button title="Settings">⚙️</button>
+        <button title="Cart">🛒</button>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <h2>Categories</h2>
+    <div class="section">
+        <p>Price Filters:</p>
+        <input type="number" placeholder="Min ₹">
+        <input type="number" placeholder="Max ₹">
+        <br><br>
+        <button class="search-btn" style="background:#0d9488">Apply</button>
+        <button class="search-btn" style="background:#6b7280">Clear</button>
+    </div>
+
+    <h2>Admin</h2>
+    <div class="section">
+        <button class="search-btn">Add Product</button>
+        <button class="search-btn" style="background:#6b7280">Settings</button>
+    </div>
+
+    <h2>Top picks for you</h2>
+    <div class="section">
+        <p>Free delivery • Easy returns</p>
+    </div>
+
+    <div class="section" style="background:#fff8e7; border-left:4px solid #ffb74d;">
+        <p><b>This site is Shree ji-inspired</b> (features & layout) but not a copy of Shree ji's brand or design.  
+        Yeh website learning purpose ke liye banayi gayi hai.</p>
+    </div>
+
+    <h2>About Shree ji Shopping</h2>
+    <div class="section">
+        <p>
+            Shree ji Shopping ek modern online shopping platform hai jaha aapko best products, fast delivery,
+            secure checkout aur budget-friendly offers milte hain.
+            Yeh site learning purpose ke liye banayi gayi hai.
+        </p>
+    </div>
+
+    <h2>Help Desk</h2>
+    <div class="section">
+        <p>Agar aapko koi problem ho ya kisi feature ko add/modify karwana ho, to aap Help Desk se contact kar sakte hain:</p>
+
+        <p><b>Email:</b> support@shreeji-shopping.com</p>
+        <p><b>Phone:</b> +91 9876543210</p>
+        <p><b>Support Hours:</b> Mon–Sat, 10 AM – 6 PM</p>
+
+        <p>Hum hamesha aapki madad ke liye taiyaar hain 😊😊😊</p>
+
+        <h3 style="text-align:center; color:#0d9488;">✨ Thank You for Shree ji Shopping Store ✨</h3>
+        <p style="text-align:center;">— Shree ji</p>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    © 2025 Shree ji Store | Demo Page for Learning
+</div>
+
+</body>
+</html>
