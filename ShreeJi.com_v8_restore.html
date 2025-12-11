@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title> — Shree ji-inspired Shopping</title>
+<style>
+:root{
+  --bg:#f3f6fb; --card:#ffffff; --accent:#ff6f00; --muted:#6b7280; --text:#0f1724;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter, system-ui, Arial;background:var(--bg);color:var(--text)}
+.header{
+  display:flex;gap:12px;align-items:center;padding:12px 18px;background:linear-gradient(90deg,#fff 0,#f8fafc 100%);position:sticky;top:0;z-index:50;border-bottom:1px solid rgba(0,0,0,0.06)
+}
+.logo{
+  display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;color:var(--accent)
+}
+.logo .mark{background:var(--accent);color:#fff;padding:8px;border-radius:6px;font-weight:900}
+.search{
+  flex:1;display:flex;gap:8px;align-items:center;background:#fff;padding:6px;border-radius:8px;border:1px solid rgba(0,0,0,0.06)
+}
+.search input{flex:1;border:0;outline:none;padding:8px;font-size:14px}
+.icon-btn{background:transparent;border:0;cursor:pointer;padding:8px;border-radius:8px}
+.top-actions{display:flex;gap:8px;align-items:center;margin-left:45px}
+.container{display:grid;grid-template-columns:260px 1fr;gap:18px;padding:18px;max-width:1200px;margin:0 auto}
+.sidebar{background:var(--card);padding:14px;border-radius:8px;border:1px solid rgba(0,0,0,0.04)}
+.section-title{font-weight:800;margin-bottom:8px;color:var(--muted);font-size:13px}
+.filter-item{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.card{background:var(--card);padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.04);display:flex;flex-direction:column;gap:8px}
+.thumb{height:150px;border-radius:8px;background-size:cover;background-position:center}
+.title{font-weight:700}
+.desc{color:var(--muted);font-size:13px}
+.price-row{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.price{font-weight:900;color:var(--accent);font-size:16px}
+.btn{background:var(--accent);color:#fff;border:0;padding:8px 10px;border-radius:8px;cursor:pointer}
+.small{font-size:13px;color:var(--muted)}
+/* drawer */
+.drawer{position:fixed;right:18px;top:90px;width:360px;background:var(--card);padding:14px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 30px 60px rgba(2,6,23,0.12);display:none;z-index:80}
+.drawer.open{display:block}
+/* settings modal */
+.settings{position:fixed;left:50%;top:80px;transform:translateX(-50%);width:min(900px,95%);background:var(--card);padding:16px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);display:none;z-index:90}
+.settings.open{display:block}
+.row{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.field{flex:1}
+.input,select{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.06)}
+.footer{padding:14px;text-align:center;color:var(--muted);font-size:13px;margin-top:24px}
+/* responsive */
+@media (max-width:900px){
+  .container{grid-template-columns:1fr;padding:12px}
+  .sidebar{order:2}
+  .header{flex-wrap:wrap}
+  .search{order:2;width:100%}
+}
+.card img { width: 100%; height: auto !important; max-height: none !important; object-fit: contain !important; background:#fff; }
+
+.card { height: auto !important; }
+.card .img-box { height: auto !important; }
+
+
+.card {
+    height: auto !important;
+}
+.card .img-box {
+    width: 100%;
+    height: auto !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    padding: 8px;
+}
+.card img {
+    width: 100%;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+}
+
+
+/* Product Image Zoom */
+.card img {
+    transition: transform 0.3s ease !important;
+}
+.card img:hover {
+    transform: scale(1.4) !important;
+    z-index: 10;
+}
+
+
+/* Full Height Image Display */
+.card .img-box {
+    width: 100%;
+    height: auto !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+}
+.card img {
+    width: auto !important;
+    height: 100% !important;
+    max-height: none !important;
+    object-fit: contain !important;
+}
+
+
+/* Force Product Image to 4×3 Ratio */
+.card .img-box {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important;
+}
+
+
+@keyframes welcomeFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+  100% { transform: translateY(0); }
+}
+
+</style>
+
+<style>
+@keyframes blinkWelcome {
+  0% { opacity:1;color:#ff6600; }
+  50% { opacity:0.4;color:#ff0099; }
+  100% { opacity:1;color:#00b7ff; }
+}
+.welcomeBlink{ animation: welcomeFloat 2.5s ease-in-out infinite;  margin-top:24px;  margin-left:45px;  font-size:22px; white-space:nowrap; }
+
+@keyframes welcomeFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+  100% { transform: translateY(0); }
+}
+
+</style>
+
+</head>
+<body>
+
+<header class="header">
+  <div class="logo"><div class="welcomeBlink">Welcome to Shree ji Store</div></div></div>
+
+  <div class="search" role="search">
+    <input id="q" placeholder="Search for products, brands and more..." aria-label="Search">
+    <button class="btn" onclick="doSearch()">Search</button>
+  </div>
+
+  <div class="top-actions">
+    <button class="icon-btn" id="openSettingsBtn" title="Settings"><span style="position:relative; top:10px; font-size:28px;">⚙️</span></button>
+    <button class="icon-btn" id="openCartBtn" title="Cart"><span style="position:relative; top:10px; font-size:28px;">🛒</span> <span id="cartCount" style="background:#ff3b30;color:#fff;padding:2px 6px;border-radius:12px;font-size:12px;display:none">0</span></button>
+  </div>
+</header>
+
+<main class="container">
+  <aside class="sidebar">
+    <div class="section-title">Categories</div>
+    <div id="cats"></div>
+
+    <div style="margin-top:24px">
+      <div class="section-title">Price</div>
+      <div class="filter-item"><input id="minP" class="input" placeholder="Min ₹" type="number"></div>
+      <div class="filter-item"><input id="maxP" class="input" placeholder="Max ₹" type="number"></div>
+      <div style="margin-top:24px"><button class="btn" onclick="applyFilters()">Apply</button> <button style="margin-left:45px" onclick="clearFilters()">Clear</button></div>
+    </div>
+
+    <div style="margin-top:24px">
+      <div class="section-title">Admin</div>
+      <div style="display:flex;gap:8px"><button class="btn" onclick="openAdd()">Add Product</button><button class="btn" style="background:#6b7280" onclick="toggleSettings()">Settings</button></div>
+    </div>
+  </aside>
+
+  <section>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div style="font-size:18px;font-weight:900">Top picks for you</div>
+      <div class="small">Free delivery • Easy returns</div>
+    </div>
+
+    <div class="products" id="products"></div>
+  </section>
+</main>
+
+<!-- Cart Drawer -->
+<div class="drawer" id="cartDrawer" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <div style="font-weight:900">Your Cart</div>
+    <div><button class="btn" onclick="checkout()">Checkout</button></div>
+  </div>
+  <div id="cartList"></div>
+  <div style="margin-top:24px;display:flex;justify-content:space-between;align-items:center">
+    <div class="small">Total</div>
+    <div style="font-weight:900" id="cartTotal">₹0</div>
+  </div>
+</div>
+
+<!-- Settings / Admin Modal -->
+<div class="settings" id="settingsModal" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div style="font-weight:900">Settings & Admin</div>
+    <div><button class="btn" id="saveSettingsBtn">Save</button></div>
+  </div>
+
+  <!-- Theme & currency -->
+  <div class="row">
+    <div class="field">
+      <label class="small">Theme</label>
+      <select id="themeSelect" class="input">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </div>
+    <div style="width:160px">
+      <label class="small">Accent</label>
+      <input id="accent" type="color" class="input" value="#ff6f00" style="height:40px;padding:4px">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label class="small">Currency</label>
+      <select id="currencySelect" class="input">
+        <option value="INR">INR (₹)</option>
+        <option value="USD">USD ($)</option>
+        <option value="EUR">EUR (€)</option>
+      </select>
+    </div>
+    <div style="width:160px">
+      <label class="small">Rate (1 INR = )</label>
+      <input id="rate" type="number" step="0.01" class="input" value="1">
+    </div>
+  </div>
+
+  
+  <div class="row">
+    <div class="field">
+      <label class="small">Allow Product Delete</label>
+      <select id="allowDelete" class="input">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+  </div>
+
+<hr style="margin:12px 0">
+
+  <!-- Add / Edit product -->
+  <div style="margin-top:24px">
+    <div style="font-weight:800;margin-bottom:8px">Add / Edit Product</div>
+    <input id="pId" class="input" placeholder="id (leave empty to auto)">
+    <input id="pTitle" class="input" placeholder="Product title">
+    <input id="pPrice" class="input" placeholder="Price in INR" type="number">
+    <input id="pImg" class="input" placeholder="Image URL">
+
+<input id="pImgFile" type="file" accept="image/*" class="input" onchange="handleImageUpload(event)">
+
+    <select id="pCat" class="input">
+      <option value="General">General</option>
+      <option value="Clothing">Clothing</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Footwear">Footwear</option>
+    </select>
+    <div style="display:flex;gap:8px;margin-top:24px">
+      <button class="btn" onclick="saveProduct()">Save Product</button>
+      <button class="btn" style="background:#6b7280" onclick="clearProductForm()">Clear</button>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;display:flex;gap:8px">
+    <button class="btn" id="resetBtn" style="background:#ff6b6b">Reset  Data</button>
+    <button class="btn" id="closeSettings" style="background:transparent;border:1px solid rgba(0,0,0,0.06)">Close</button>
+  </div>
+</div>
+
+<footer class="footer">This site is <b>Shree ji-inspired</b> (features & layout) but not a copy of Shree ji's brand or design. Use for  & learning.</footer>
+
+<script>
+// --- Data & state ---
+let _PRODUCTS = [
+  {id:'fk001',title:'Casual Sneakers',price:1999,cat:'Footwear',img:'https://images.unsplash.com/photo-1606813902873-9bd28c1b0c8b'},
+  {id:'fk002',title:'Slim Fit Shirt',price:899,cat:'Clothing',img:'https://images.unsplash.com/photo-1520975913602-8c5e4f6c6c4a'},
+  {id:'fk003',title:'Wireless Earbuds',price:1599,cat:'Electronics',img:'https://images.unsplash.com/photo-1585386959984-a4155229e6a9'},
+  {id:'fk004',title:'Smart Watch',price:3499,cat:'Electronics',img:'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b'}
+];
+
+let products = JSON.parse(localStorage.getItem('Shree jik_products') || 'null') || _PRODUCTS.slice();
+let cart = JSON.parse(localStorage.getItem('Shree jik_cart') || '{}');
+let settings = JSON.parse(localStorage.getItem('Shree jik_settings') || 'null') || {
+  theme:'light', accent:'#ff6f00', currency:'INR', rate:1, showPrices:true, enableCheckout:true, allowDelete:'yes'
+};
+
+// --- Helpers ---
+function money(n){
+  if(settings.currency==='INR') return '₹'+Math.round(n*settings.rate);
+  if(settings.currency==='USD') return '$'+(n*settings.rate/83).toFixed(2);
+  if(settings.currency==='EUR') return '€'+(n*settings.rate/90).toFixed(2);
+  return '₹'+Math.round(n*settings.rate);
+}
+
+// --- Apply settings to UI ---
+function applySettingsToUI(){
+  document.documentElement.style.setProperty('--accent', settings.accent);
+  document.querySelectorAll('.btn').forEach(b=> b.style.background = settings.accent);
+  if(settings.theme==='dark'){
+    document.documentElement.style.setProperty('--bg','#0b1220');
+    document.documentElement.style.setProperty('--card','#071022');
+    document.documentElement.style.setProperty('--muted','#9aa6b2');
+    document.documentElement.style.setProperty('--text','#e6eef3');
+    document.body.style.background = 'var(--bg)';
+  } else {
+    document.documentElement.style.setProperty('--bg','#f3f6fb');
+    document.documentElement.style.setProperty('--card','#ffffff');
+    document.documentElement.style.setProperty('--muted','#6b7280');
+    document.documentElement.style.setProperty('--text','#0f1724');
+    document.body.style.background = 'var(--bg)';
+  }
+  renderProducts(products);
+  updateCartUI();
+}
+
+// --- Persistence ---
+function saveAll(){ localStorage.setItem('Shree jik_products', JSON.stringify(products)); localStorage.setItem('Shree jik_cart', JSON.stringify(cart)); localStorage.setItem('Shree jik_settings', JSON.stringify(settings)); }
+
+// --- Rendering ---
+function renderProducts(list){
+  const wrap = document.getElementById('products'); wrap.innerHTML='';
+  list.forEach(p=>{
+    const el=document.createElement('article'); el.className='card';
+    el.innerHTML = `
+      <div class="thumb" style="background-image:url('${p.img}')"></div>
+      <div class="title">${p.title}</div>
+      <div class="desc small">${p.cat}</div>
+      
+<div class="price-row">
+  <div class="price">${settings.showPrices?money(p.price):'—'}</div>
+  <div style="display:flex;gap:6px">
+    <button class="btn" style="background:#007bff" onclick="quickView('${p.id}')">Edit</button>
+    <button class="btn" style="background:#ff3b30" onclick="deleteDirect('${p.id}')">Delete</button>
+  </div>
+</div>
+
+        <div style="display:flex;gap:8px">
+          <button class="btn" onclick="addToCart('${p.id}')">Add to cart</button>
+          <button class="btn" style="background:#6b7280" onclick="quickView('${p.id}')">View</button>
+        </div>
+      </div>
+    `;
+    wrap.appendChild(el);
+  });
+  buildCategories();
+}
+
+// categories
+function buildCategories(){
+  const box=document.getElementById('cats'); box.innerHTML='';
+  const cats = Array.from(new Set(products.map(p=>p.cat)));
+  cats.forEach(c=>{
+    const div = document.createElement('div');
+    div.innerHTML = `<label><input type="radio" name="cat" onchange="filterCat('${c}')"> ${c}</label>`;
+    box.appendChild(div);
+  });
+  const clear = document.createElement('div'); clear.innerHTML = `<label><input type="radio" name="cat" onchange="filterCat('')"> All</label>`;
+  box.appendChild(clear);
+}
+
+// --- Filters ---
+function filterCat(c){ const list = c? products.filter(p=>p.cat===c) : products.slice(); renderProducts(list); }
+function applyFilters(){ const min = Number(document.getElementById('minP').value)||0; const max = Number(document.getElementById('maxP').value)||Infinity; const filtered = products.filter(p=>p.price>=min && p.price<=max); renderProducts(filtered); }
+function clearFilters(){ document.getElementById('minP').value=''; document.getElementById('maxP').value=''; renderProducts(products); }
+
+// --- Search ---
+function doSearch(){ const q = document.getElementById('q').value.trim().toLowerCase(); if(!q) return renderProducts(products); const found = products.filter(p=> (p.title+p.cat).toLowerCase().includes(q)); renderProducts(found); }
+
+// --- Cart ---
+function loadCart(){ cart = JSON.parse(localStorage.getItem('Shree jik_cart')||'{}'); updateCartUI(); }
+function saveCart(){ localStorage.setItem('Shree jik_cart', JSON.stringify(cart)); updateCartUI(); }
+function addToCart(id){ cart[id] = (cart[id]||0)+1; saveCart(); openCart(); }
+function changeQty(id,delta){ cart[id] = Math.max(0,(cart[id]||0)+delta); if(cart[id]===0) delete cart[id]; saveCart(); }
+function removeFromCart(id){ delete cart[id]; saveCart(); }
+function updateCartUI(){
+  const count = Object.values(cart).reduce((a,b)=>a+b,0);
+  const badge = document.getElementById('cartCount');
+  if(count>0){ badge.style.display='inline-block'; badge.textContent = count } else badge.style.display='none';
+  const list = document.getElementById('cartList'); list.innerHTML='';
+  let total = 0;
+  Object.keys(cart).forEach(id=>{
+    const p = products.find(x=>x.id===id);
+    if(!p) return;
+    const q = cart[id]; total += p.price*q;
+    const row = document.createElement('div'); row.style.display='flex'; row.style.gap='8px'; row.style.marginBottom='10px';
+    row.innerHTML = `
+      <div style="width:64px;height:64px;background-image:url('${p.img}');background-size:cover;border-radius:6px"></div>
+      <div style="flex:1">
+        <div style="font-weight:700">${p.title}</div>
+        <div class="small">${money(p.price)} × ${q}</div>
+        <div style="margin-top:24px">
+          <button class="btn" style="padding:6px 8px" onclick="changeQty('${id}',-1)">−</button>
+          <span style="min-width:28px;display:inline-block;text-align:center">${q}</span>
+          <button class="btn" style="padding:6px 8px" onclick="changeQty('${id}',1)">+</button>
+          <button class="icon-btn" style="color:#ff6b6b;margin-left:45px" onclick="removeFromCart('${id}')">Remove</button>
+        </div>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+  document.getElementById('cartTotal').textContent = settings.showPrices? money(total) : '—';
+}
+
+// checkout (simulate)
+function checkout(){
+  const total = Object.keys(cart).reduce((s,id)=>{ const p=products.find(x=>x.id===id); return s + (p? p.price*(cart[id]||0):0) }, 0);
+  if(total===0){ alert('Your cart is empty'); return; }
+  if(!settings.enableCheckout){ alert('Checkout is disabled in settings'); return; }
+  if(confirm('Proceed to simulated checkout? Total: '+money(total))){ localStorage.setItem('Shree jik_last_order', JSON.stringify({id:'ORD'+Date.now(),items:cart,total,created:new Date().toISOString()})); cart={}; saveCart(); alert('Order placed (simulated). Thank you!'); closeCart(); }
+}
+
+// --- Settings & Admin UI ---
+const modal = document.getElementById('settingsModal');
+document.getElementById('openSettingsBtn').addEventListener('click', ()=>{ bindSettings(); modal.classList.add('open'); modal.style.display='block' });
+document.getElementById('closeSettings').addEventListener('click', ()=>{ modal.classList.remove('open'); modal.style.display='none' });
+document.getElementById('saveSettingsBtn').addEventListener('click', ()=>{ saveSettingsFromUI(); modal.classList.remove('open'); modal.style.display='none'; applySettingsToUI(); saveAll(); alert('Settings saved') });
+document.getElementById('resetBtn').addEventListener('click', ()=>{ if(confirm('Reset  data?')){ products = _PRODUCTS.slice(); cart = {}; settings = {theme:'light',accent:'#ff6f00',currency:'INR',rate:1,showPrices:true,enableCheckout:true, allowDelete:'yes'}; saveAll(); applySettingsToUI(); alert(' reset'); }});
+
+// bind settings
+function bindSettings(){
+  document.getElementById('themeSelect').value = settings.theme;
+  document.getElementById('accent').value = settings.accent;
+  document.getElementById('currencySelect').value = settings.currency;
+  document.getElementById('rate').value = settings.rate;
+  document.getElementById('allowDelete').value = settings.allowDelete;
+  document.getElementById('pId').value=''; document.getElementById('pTitle').value=''; document.getElementById('pPrice').value=''; document.getElementById('pImg').value=''; document.getElementById('pCat').value='General';
+}
+
+function saveSettingsFromUI(){
+  settings.theme = document.getElementById('themeSelect').value;
+  settings.accent = document.getElementById('accent').value;
+  settings.currency = document.getElementById('currencySelect').value;
+  settings.rate = Number(document.getElementById('rate').value) || 1;
+  saveAll();
+}
+
+// Add / Edit product
+let editingId = null;
+function openAdd(){ document.getElementById('pId').value=''; document.getElementById('pTitle').value=''; document.getElementById('pPrice').value=''; document.getElementById('pImg').value=''; document.getElementById('pCat').value='General'; modal.classList.add('open'); modal.style.display='block' }
+function saveProduct(){
+  const idInput = document.getElementById('pId').value.trim();
+  const title = document.getElementById('pTitle').value.trim();
+  const price = Number(document.getElementById('pPrice').value);
+  const img = document.getElementById('pImg').value.trim() || 'https://via.placeholder.com/320x200?text=No+Image';
+  const cat = document.getElementById('pCat').value;
+  if(!title || !price){ alert('Please enter title and price'); return; }
+  const id = idInput || ('Shree ji'+Date.now().toString().slice(-6));
+  const existing = products.findIndex(p=>p.id===id);
+  if(existing>=0){
+    products[existing] = {id,title,price,cat,img};
+  } else {
+    products.unshift({id,title,price,cat,img});
+  }
+  saveAll(); renderProducts(products); clearProductForm(); alert('Product saved');
+}
+
+function clearProductForm(){ document.getElementById('pId').value=''; document.getElementById('pTitle').value=''; document.getElementById('pPrice').value=''; document.getElementById('pImg').value=''; document.getElementById('pCat').value='General'; }
+
+
+function deleteDirect(id){
+  if(settings.allowDelete==='no'){ alert('Delete disabled in settings'); return; }
+  if(confirm('Delete this product?')){
+    products = products.filter(x=>x.id!==id);
+    saveAll();
+    renderProducts(products);
+  }
+}
+
+// quick view and edit/delete from product card (via prompt)
+function quickView(id){
+  const p = products.find(x=>x.id===id); if(!p){ alert('Not found'); return; }
+  const action = prompt(`Product: ${p.title}\n1) Edit\n2) Delete\n\nEnter 1 or 2, or cancel`);
+  if(action==='1'){ document.getElementById('pId').value = p.id; document.getElementById('pTitle').value = p.title; document.getElementById('pPrice').value = p.price; document.getElementById('pImg').value = p.img; document.getElementById('pCat').value = p.cat; modal.classList.add('open'); modal.style.display='block'; }
+  
+// delete control
+if(settings.allowDelete === 'no'){
+  if(action==='2'){ alert('Delete disabled in settings'); return; }
+}
+if(action==='2'){ if(confirm('Delete this product?')){ products = products.filter(x=>x.id!==id); saveAll(); renderProducts(products); } }
+}
+
+// --- Cart drawer open/close ---
+const cartDrawer = document.getElementById('cartDrawer');
+document.getElementById('openCartBtn').addEventListener('click', ()=> openCart());
+function openCart(){ cartDrawer.classList.add('open'); cartDrawer.style.display='block'; }
+function closeCart(){ cartDrawer.classList.remove('open'); cartDrawer.style.display='none'; }
+
+// --- Init ---
+function init(){ applySettingsToUI(); renderProducts(products); loadCart(); }
+init();
+
+// Save on unload
+window.addEventListener('beforeunload', ()=> saveAll());
+
+function handleImageUpload(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    document.getElementById('pImg').value = evt.target.result; // base64 image
+  };
+  reader.readAsDataURL(file);
+}
+
+</script>
+
+
+<!-- Added Description and Help Desk -->
+<section style="padding:20px;max-width:900px;margin:20px auto;background:#ffffff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1)">
+  <h2 style="margin-top:0;">About Shree ji Shopping</h2>
+  <p style="font-size:15px;line-height:1.6;">
+    Shree ji Shopping ek modern online shopping platform hai jaha aaShree jio best products, fast delivery,
+    secure checkout aur budget-friendly offers milte hain. Yah site  aur learning purpose ke liye banayi gayi hai.
+  </p>
+
+  <h3>Help Desk</h3>
+  <p style="font-size:15px;line-height:1.6;">
+    Agar aaShree jio koi problem ho ya koi feature add/modify karwana ho, to aap Help Desk se contact kar sakte hain:
+  </p>
+
+  <ul style="font-size:15px;line-height:1.6;">
+    <li><b>Email:</b> support@Shree ji-shopping.</li>
+    <li><b>Phone:</b> +91 9876543210</li>
+    <li><b>Support Hours:</b> Mon–Sat, 10 AM – 6 PM</li>
+  </ul>
+
+  <p style="font-size:14px;color:#555;">Hum hamesha ham hamesha  aapki madad ke liye taiyaar hain 😊😊 😊</p>
+</section>
+
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);justify-content:center;align-items:center;z-index:9999;">
+  <div style="background:#fff;padding:20px;border-radius:8px;width:300px;">
+    <h3>Login</h3>
+    <input id="loginUser" type="text" placeholder="Username" class="input" style="width:100%;margin-top:24px;">
+    <input id="loginPass" type="password" placeholder="Password" class="input" style="width:100%;margin-top:24px;">
+    <button id="doLogin" class="btn" style="width:100%;margin-top:24px;background:#007bff;color:#fff;">Login</button>
+    <button onclick="document.getElementById('loginModal').style.display='none'" class="btn" style="width:100%;margin-top:24px;background:#ccc;">Close</button>
+  </div>
+</div>
+
+<script>
+document.getElementById('loginBtn').onclick = function(){
+    document.getElementById('loginModal').style.display='flex';
+};
+document.getElementById('doLogin').onclick = function(){
+    alert('Login Successful (Demo)');
+    document.getElementById('loginModal').style.display='none';
+};
+</script>
+
+
+<!-- LOGIN ICON MODAL -->
+<div id="loginBox" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);justify-content:center;align-items:center;z-index:9999;">
+  <div style="background:#fff;padding:20px;border-radius:10px;width:320px;">
+    <h3>Login Options</h3>
+    <button class="btn" style="width:100%;margin-top:24px;">Login with Gmail</button>
+    <button class="btn" style="width:100%;margin-top:24px;">Login with Google Account</button>
+    <input type="number" placeholder="Mobile Number" class="input" style="width:100%;margin-top:24px;">
+    <button class="btn" style="width:100%;margin-top:24px;background:#007bff;color:#fff;">Continue</button>
+    <button onclick="document.getElementById('loginBox').style.display='none'" class="btn" style="width:100%;margin-top:24px;background:#ccc;">Close</button>
+  </div>
+</div>
+
+<script>
+document.getElementById('loginIcon').onclick = function(){
+  document.getElementById('loginBox').style.display='flex';
+}
+</script>
+
+
+
+
+
+<!-- Animated Colorful Footer -->
+<style>
+@keyframes footerGlow {
+  0% { color:#ff4d4d; }
+  25% { color:#ffcc00; }
+  50% { color:#33cc33; }
+  75% { color:#3399ff; }
+  100% { color:#ff4dff; }
+}
+.footerBar {
+  width:100%;
+  text-align:center;
+  padding:15px 0;
+  margin-top:24px;
+  font-size:16px;
+  font-weight:600;
+  letter-spacing:1px;
+  animation: footerGlow 3s linear infinite;
+}
+
+@keyframes welcomeFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+  100% { transform: translateY(0); }
+}
+
+</style>
+
+<div class="footerBar">
+✨ Thank You for Shree ji Shopping Store ✨
+</div>
+
+
+<style>
+@keyframes fall {
+  0% {transform: translateY(-10vh) rotate(0deg); opacity:1;}
+  100% {transform: translateY(110vh) rotate(360deg); opacity:0;}
+}
+#flowerRain {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:9999;
+}
+
+.flower {
+  position:absolute;
+  top:-10vh;
+  font-size:24px;
+  animation: fall 5s linear forwards;
+}
+
+@keyframes welcomeFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+  100% { transform: translateY(0); }
+}
+
+</style>
+
+<div id="flowerRain"></div>
+
+<script>
+// create 40 falling flowers
+function startFlowerRain(){
+  const rain=document.getElementById('flowerRain');
+  const flowers=["🌸","💮","🌺","🌷","🌼","🌹"];
+  for(let i=0;i<40;i++){
+    const f=document.createElement("div");
+    f.className="flower";
+    f.innerText=flowers[Math.floor(Math.random()*flowers.length)];
+    f.style.left=Math.random()*100+"%";
+    f.style.fontSize=(20+Math.random()*20)+"px";
+    f.style.animationDuration=(3+Math.random()*2)+"s";
+    rain.appendChild(f);
+  }
+  setTimeout(()=>{ rain.style.display="none"; },5000);
+}
+window.onload=startFlowerRain;
+</script>
+
+
+<script>
+// continuous flower rain near each 'Shree ji'
+document.addEventListener("DOMContentLoaded", ()=>{
+  const flowers=["🌸","💮","🌺","🌷","🌼","🌹"];
+
+  function addFlowerRain(el){
+    const box=document.createElement("div");
+    box.style.position="absolute";
+    box.style.top="0";
+    box.style.left="0";
+    box.style.width="100%";
+    box.style.height="100%";
+    box.style.pointerEvents="none";
+    box.style.overflow="visible";
+    box.style.zIndex="9999";
+
+    el.style.position="relative";
+    el.appendChild(box);
+
+    setInterval(()=>{
+      const f=document.createElement("div");
+      f.innerText=flowers[Math.floor(Math.random()*flowers.length)];
+      f.style.position="absolute";
+      f.style.left=(Math.random()*80)+"%";
+      f.style.top="-10px";
+      f.style.fontSize=(16+Math.random()*10)+"px";
+      f.style.opacity="1";
+      f.style.transition="transform 2s linear, opacity 2s linear";
+      box.appendChild(f);
+
+      requestAnimationFrame(()=>{
+        f.style.transform="translateY(40px)";
+        f.style.opacity="0";
+      });
+
+      setTimeout(()=>f.remove(),2000);
+    },600);
+  }
+
+  const walker=document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let node;
+  while(node=walker.nextNode()){
+    if(node.nodeValue.match(/Shree ji/i)){
+      const parent=node.parentElement;
+      if(parent) addFlowerRain(parent);
+    }
+  }
+});
+</script>
+
+
+<!-- Shree ji signature -->
+<style>
+.signature-wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:18px 0;
+  margin-top:24px;
+  background:transparent;
+}
+.signature {
+  font-family: 'Pacifico', 'Brush Script MT', cursive;
+  font-size:36px;
+  color:#ff6f00;
+  letter-spacing:1px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transform-origin:center;
+  animation: signGlow 2.8s ease-in-out infinite;
+}
+@keyframes signGlow {
+  0% { filter: drop-shadow(0 0 0 rgba(255,111,0,0)); transform: scale(0.99); }
+  50% { filter: drop-shadow(0 8px 18px rgba(255,111,0,0.25)); transform: scale(1.02); }
+  100% { filter: drop-shadow(0 0 0 rgba(255,111,0,0)); transform: scale(0.99); }
+}
+/* make it compact on small screens */
+@media (max-width:600px){
+  .signature { font-size:24px; }
+}
+
+@keyframes welcomeFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+  100% { transform: translateY(0); }
+}
+
+</style>
+
+<div class="signature-wrap" aria-hidden="true">
+  <div class="signature">— Shree ji</div>
+</div>
+
+</body>
+</html>
